@@ -183,6 +183,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
     adjustmentEle : false,
     adjustmentTypeEles : false,
     grandTotal : false,
+    totalPurchaseCostEle : false,
+    marginTotalEle : false,
     groupTaxContainer : false,
     dedutTaxesContainer : false,
     
@@ -232,6 +234,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
         this.adjustmentEle = jQuery('#adjustment');
         this.adjustmentTypeEles = jQuery('input[name="adjustmentType"]');
         this.grandTotal = jQuery('#grandTotal');
+        this.totalPurchaseCostEle = jQuery('#totalPurchaseCost');
+        this.marginTotalEle = jQuery('#marginTotal');
         this.groupTaxContainer = jQuery('#group_tax_div');
         this.dedutTaxesContainer = jQuery('#deductTaxesBlock');
         
@@ -705,12 +709,62 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 		return this;
 	},
 
-	getGrandTotal : function() {
-		var grandTotal = this.grandTotal.text();
+        getGrandTotal : function() {
+                var grandTotal = this.grandTotal.text();
         if(grandTotal)
             return parseFloat(grandTotal);
         return 0;
-	},
+        },
+
+    calculateTotalPurchaseCost : function(){
+        var self = this;
+        var total = 0;
+        this.lineItemsHolder.find('tr.'+this.lineItemDetectingClass+' .purchaseCost').each(function(index,domElement){
+            var val = parseFloat(jQuery(domElement).text());
+            if(!isNaN(val)){
+                total += val;
+            }
+        });
+        total = total.toFixed(this.numOfCurrencyDecimals);
+        this.setTotalPurchaseCost(total);
+    },
+
+    calculateMarginTotal : function(){
+        var self = this;
+        var total = 0;
+        this.lineItemsHolder.find('tr.'+this.lineItemDetectingClass+' .margin').each(function(index,domElement){
+            var val = parseFloat(jQuery(domElement).text());
+            if(!isNaN(val)){
+                total += val;
+            }
+        });
+        total = total.toFixed(this.numOfCurrencyDecimals);
+        this.setMarginTotal(total);
+    },
+
+        setTotalPurchaseCost : function(value){
+                this.totalPurchaseCostEle.text(value);
+                return this;
+        },
+
+        getTotalPurchaseCost : function(){
+                var val = this.totalPurchaseCostEle.text();
+                if(val)
+                        return parseFloat(val);
+                return 0;
+        },
+
+        setMarginTotal : function(value){
+                this.marginTotalEle.text(value);
+                return this;
+        },
+
+        getMarginTotal : function(){
+                var val = this.marginTotalEle.text();
+                if(val)
+                        return parseFloat(val);
+                return 0;
+        },
     
     isIndividualTaxMode : function() {
         return (this.taxTypeElement.val() == Inventory_Edit_Js.individualTaxType) ? true : false;
@@ -1270,9 +1324,11 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 			grandTotal -=  parseFloat(adjustment);
 		}
 
-		grandTotal = grandTotal.toFixed(this.numOfCurrencyDecimals);
-		this.setGrandTotal(grandTotal);
-	},
+                grandTotal = grandTotal.toFixed(this.numOfCurrencyDecimals);
+                this.setGrandTotal(grandTotal);
+                this.calculateTotalPurchaseCost();
+                this.calculateMarginTotal();
+        },
     
     calculateGroupTax : function() {
         var self = this;

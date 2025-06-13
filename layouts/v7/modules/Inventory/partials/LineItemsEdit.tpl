@@ -467,15 +467,31 @@
 						</span>
 					</td>
 				</tr>
-				<tr valign="top">
-					<td width="83%">
-						<span class="pull-right"><strong>{vtranslate('LBL_GRAND_TOTAL',$MODULE)}</strong></span>
-					</td>
-					<td>
-						<span id="grandTotal" name="grandTotal" class="pull-right grandTotal">{$FINAL.grandTotal}</span>
-					</td>
-				</tr>
-				{if $MODULE eq 'Invoice' or $MODULE eq 'PurchaseOrder'}
+                                <tr valign="top">
+                                        <td width="83%">
+                                                <span class="pull-right"><strong>{vtranslate('LBL_GRAND_TOTAL',$MODULE)}</strong></span>
+                                        </td>
+                                        <td>
+                                                <span id="grandTotal" name="grandTotal" class="pull-right grandTotal">{$FINAL.grandTotal}</span>
+                                        </td>
+                                </tr>
+                                <tr valign="top">
+                                        <td width="83%">
+                                                <span class="pull-right"><strong>{vtranslate('LBL_TOTAL_PURCHASE_COST',$MODULE)}</strong></span>
+                                        </td>
+                                        <td>
+                                                <span id="totalPurchaseCost" name="totalPurchaseCost" class="pull-right">{if $FINAL.totalPurchaseCost}{$FINAL.totalPurchaseCost}{else}0{/if}</span>
+                                        </td>
+                                </tr>
+                                <tr valign="top">
+                                        <td width="83%">
+                                                <span class="pull-right"><strong>{vtranslate('LBL_MARGIN_TOTAL',$MODULE)}</strong></span>
+                                        </td>
+                                        <td>
+                                                <span id="marginTotal" name="marginTotal" class="pull-right">{if $FINAL.marginTotal}{$FINAL.marginTotal}{else}0{/if}</span>
+                                        </td>
+                                </tr>
+                                {if $MODULE eq 'Invoice' or $MODULE eq 'PurchaseOrder'}
 					<tr valign="top">
 						<td width="83%" >
 							<div class="pull-right">

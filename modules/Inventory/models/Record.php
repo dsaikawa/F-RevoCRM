@@ -199,7 +199,18 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 		}
 
 		$relatedProducts[1]['final_details']['deductTaxes'] = $deductTaxes;
-		$relatedProducts[1]['final_details']['deductTaxesTotalAmount'] = number_format($deductedTaxesTotalAmount, $numOfCurrencyDecimalPlaces,'.','');
+                $relatedProducts[1]['final_details']['deductTaxesTotalAmount'] = number_format($deductedTaxesTotalAmount, $numOfCurrencyDecimalPlaces,'.','');
+
+                $totalPurchaseCost = 0;
+                $totalMargin = 0;
+                for ($i = 1; $i <= $productsCount; $i++) {
+                        $totalPurchaseCost += (float)$relatedProducts[$i]['purchaseCost'.$i];
+                        if (isset($relatedProducts[$i]['margin'.$i])) {
+                                $totalMargin += (float)$relatedProducts[$i]['margin'.$i];
+                        }
+                }
+                $relatedProducts[1]['final_details']['totalPurchaseCost'] = number_format($totalPurchaseCost, $numOfCurrencyDecimalPlaces,'.','');
+                $relatedProducts[1]['final_details']['marginTotal'] = number_format($totalMargin, $numOfCurrencyDecimalPlaces,'.','');
 
 		if ($productIdsList) {
 			$imageDetailsList = Products_Record_Model::getProductsImageDetails($productIdsList);
@@ -885,8 +896,19 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 				$deductedTaxesTotalAmount = $deductedTaxesTotalAmount + $taxAmount;
 			}
 		}
-		$finalDetails['deductTaxes'] = $deductTaxes;
-		$finalDetails['deductTaxesTotalAmount'] = number_format($deductedTaxesTotalAmount, $noOfDecimalPlaces, '.', '');
+                $finalDetails['deductTaxes'] = $deductTaxes;
+                $finalDetails['deductTaxesTotalAmount'] = number_format($deductedTaxesTotalAmount, $noOfDecimalPlaces, '.', '');
+
+                $totalPurchaseCost = 0;
+                $totalMargin = 0;
+                for ($i = 1; $i <= $totalProductsCount; $i++) {
+                        $totalPurchaseCost += (float)$relatedProducts[$i]['purchaseCost'.$i];
+                        if (isset($relatedProducts[$i]['margin'.$i])) {
+                                $totalMargin += (float)$relatedProducts[$i]['margin'.$i];
+                        }
+                }
+                $finalDetails['totalPurchaseCost'] = number_format($totalPurchaseCost, $noOfDecimalPlaces, '.', '');
+                $finalDetails['marginTotal'] = number_format($totalMargin, $noOfDecimalPlaces, '.', '');
 
 		$imageFieldModel = $this->getModule()->getField('image');
 		if ($productIdsList && $imageFieldModel && $imageFieldModel->isViewable()) {

@@ -362,6 +362,30 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <td width="83%">
+                <div align="right">
+                    <strong>{vtranslate('LBL_TOTAL_PURCHASE_COST',$MODULE_NAME)}</strong>
+                </div>
+            </td>
+            <td>
+                <div align="right" id="totalPurchaseCostDetail">
+                    {$FINAL_DETAILS["totalPurchaseCost"]}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="83%">
+                <div align="right">
+                    <strong>{vtranslate('LBL_MARGIN_TOTAL',$MODULE_NAME)}</strong>
+                </div>
+            </td>
+            <td>
+                <div align="right" id="marginTotalDetail">
+                    {$FINAL_DETAILS["marginTotal"]}
+                </div>
+            </td>
+        </tr>
         {if $MODULE_NAME eq 'Invoice' or $MODULE_NAME eq 'PurchaseOrder'}
             <tr>
                 <td width="83%">
