@@ -204,24 +204,39 @@
 								<i class="fa fa-plus"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_PRODUCT',$MODULE)}</strong>
 							</button>
 						</span>
-						<span class="btn-group">
-							<button type="button" class="btn btn-default" id="addService" data-module-name="Services" >
-								<i class="fa fa-plus"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_SERVICE',$MODULE)}</strong>
-							</button>
-						</span>
+                                                <span class="btn-group">
+                                                        <button type="button" class="btn btn-default" id="addService" data-module-name="Services" >
+                                                                <i class="fa fa-plus"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_SERVICE',$MODULE)}</strong>
+                                                        </button>
+                                                </span>
+                                                <span class="btn-group">
+                                                        <button type="button" class="btn btn-default" id="addCustom" data-module-name="Custom" >
+                                                                <i class="fa fa-plus"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_CUSTOM_ITEM',$MODULE)}</strong>
+                                                        </button>
+                                                </span>
 					</div>
 				{elseif $PRODUCT_ACTIVE eq 'true'}
-					<div class="btn-group">
-						<button type="button" class="btn btn-default" id="addProduct" data-module-name="Products">
-							<i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_PRODUCT',$MODULE)}</strong>
-						</button>
-					</div>
+                                        <div class="btn-group">
+                                                <button type="button" class="btn btn-default" id="addProduct" data-module-name="Products">
+                                                        <i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_PRODUCT',$MODULE)}</strong>
+                                                </button>
+                                        </div>
+                                        <div class="btn-group">
+                                                <button type="button" class="btn btn-default" id="addCustom" data-module-name="Custom">
+                                                        <i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_CUSTOM_ITEM',$MODULE)}</strong>
+                                                </button>
+                                        </div>
 				{elseif $SERVICE_ACTIVE eq 'true'}
-					<div class="btn-group">
-						<button type="button" class="btn btn-default" id="addService" data-module-name="Services">
-							<i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_SERVICE',$MODULE)}</strong>
-						</button>
-					</div>
+                                        <div class="btn-group">
+                                                <button type="button" class="btn btn-default" id="addService" data-module-name="Services">
+                                                        <i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_SERVICE',$MODULE)}</strong>
+                                                </button>
+                                        </div>
+                                        <div class="btn-group">
+                                                <button type="button" class="btn btn-default" id="addCustom" data-module-name="Custom">
+                                                        <i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_CUSTOM_ITEM',$MODULE)}</strong>
+                                                </button>
+                                        </div>
 				{/if}
 			</div>
 		</div>

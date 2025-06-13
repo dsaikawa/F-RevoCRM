@@ -1730,18 +1730,25 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
             var params = {'currentTarget' : currentTarget}
             var newLineItem = self.getNewLineItem(params);
             newLineItem = newLineItem.appendTo(self.lineItemsHolder);
-			newLineItem.find('input.productName').addClass('autoComplete');
+            if(currentTarget.attr('id') != 'addCustom'){
+                        newLineItem.find('input.productName').addClass('autoComplete');
+            } else {
+                        newLineItem.find('input.productName').removeClass('autoComplete');
+            }
             newLineItem.find('.ignore-ui-registration').removeClass('ignore-ui-registration');
             vtUtils.applyFieldElementsView(newLineItem);
             app.event.trigger('post.lineItem.New', newLineItem);
             self.checkLineItemRow();
-            self.registerLineItemAutoComplete(newLineItem);
+            if(currentTarget.attr('id') != 'addCustom'){
+                self.registerLineItemAutoComplete(newLineItem);
+            }
             if(typeof data != "undefined") {
                 self.mapResultsToFields(newLineItem,data);
             }
         }
         jQuery('#addProduct').on('click', addLineItemEventHandler);
         jQuery('#addService').on('click', addLineItemEventHandler);
+        jQuery('#addCustom').on('click', addLineItemEventHandler);
     },
     
     registerProductAndServiceSelector : function() {
