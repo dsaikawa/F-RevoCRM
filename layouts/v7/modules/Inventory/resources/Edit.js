@@ -1792,8 +1792,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
     /**
 	  * Function which will register event for list price event change
 	  */
-	 registerListPriceChangeEvent : function() {
-		var self = this;
+        registerListPriceChangeEvent : function() {
+                var self = this;
 		
 		this.lineItemsHolder.on('focusout', 'input.listPrice',function(e){
 			var element = jQuery(e.currentTarget);
@@ -1824,9 +1824,21 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 					element.data('isPriceChanged', true);
 				}
 			}
-			self.quantityChangeActions(lineItemRow);
-		});
-	 },
+                self.quantityChangeActions(lineItemRow);
+                });
+        },
+
+        registerPurchaseCostChangeEvent : function() {
+                var self = this;
+                this.lineItemsHolder.on('focusout','input.unitPurchaseCost', function(e){
+                        var element = jQuery(e.currentTarget);
+                        var lineItemRow = self.getClosestLineItemRow(element);
+                        if(!self.formValidatorInstance.element(element)) {
+                                return;
+                        }
+                        self.quantityChangeActions(lineItemRow);
+                });
+        },
      
 	 //軽減税率のチェックボックスを変更したときに、変更内容を保存
 	 registerReducedtaxrateChangeEvent : function(){
@@ -2580,6 +2592,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
     registerLineItemEvents : function() {
         this.registerQuantityChangeEvent();
         this.registerListPriceChangeEvent();
+        this.registerPurchaseCostChangeEvent();
         this.registerPriceBookPopUp();
         this.registerLineItemTaxShowEvent();
         this.registerTaxTypeChange();

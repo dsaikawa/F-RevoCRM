@@ -160,16 +160,16 @@
 						<td>
 							<strong>{vtranslate('LBL_QTY',$MODULE)}</strong>
 						</td>
-						{if $PURCHASE_COST_EDITABLE}
-							<td>
-								<strong class="pull-right">{vtranslate({$LINEITEM_FIELDS['purchase_cost']->get('label')},$MODULE)}</strong>
-							</td>
-						{/if}
-						{if $LIST_PRICE_EDITABLE}
-							<td>
-								<strong>{vtranslate({$LINEITEM_FIELDS['listprice']->get('label')},$MODULE)}</strong>
-							</td>
-						{/if}
+                                               {if $LIST_PRICE_EDITABLE}
+                                                       <td>
+                                                               <strong>{vtranslate({$LINEITEM_FIELDS['listprice']->get('label')},$MODULE)}</strong>
+                                                       </td>
+                                               {/if}
+                                               {if $PURCHASE_COST_EDITABLE}
+                                                       <td>
+                                                               <strong class="pull-right">{vtranslate({$LINEITEM_FIELDS['purchase_cost']->get('label')},$MODULE)}</strong>
+                                                       </td>
+                                               {/if}
 						<td><strong class="pull-right">{vtranslate('LBL_TOTAL',$MODULE)}</strong></td>
 							{if $MARGIN_EDITABLE && $PURCHASE_COST_EDITABLE}
 							<td>
