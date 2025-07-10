@@ -130,9 +130,10 @@
 				{/if}
 			{/if}
 		</td>
-	{/if}
+        {/if}
 
-	<td>
+
+        <td>
 		<input id="{$qty}" name="{$qty}" type="text" class="qty smallInputBox inputElement"
 			   data-rule-required=true data-rule-positive=false data-rule-greater_than_zero=true value="{if !empty($data.$qty)}{$data.$qty}{else}1{/if}"
 			   {if $QUANTITY_EDITABLE eq false} disabled=disabled {/if} />
@@ -160,13 +161,6 @@
 		{/if}
 	</td>
 
-	{if $PURCHASE_COST_EDITABLE}
-		<td>
-			<input id="{$purchaseCost}" type="hidden" value="{if !empty($data.$purchaseCost) && !empty($data.$qty)}{((float)$data.$purchaseCost) / ((float)$data.$qty)}{else}0{/if}" />
-			<input name="{$purchaseCost}" type="hidden" value="{if $data.$purchaseCost}{$data.$purchaseCost}{else}0{/if}" />
-			<span class="pull-right purchaseCost">{if $data.$purchaseCost}{$data.$purchaseCost}{else}0{/if}</span>
-		</td>
-	{/if}
 
 	{if $LIST_PRICE_EDITABLE}
 		<td>
@@ -284,6 +278,13 @@
 			</span>
 		</td>
 	{/if}
+    {if $PURCHASE_COST_EDITABLE}
+        <td>
+            <input id="{$purchaseCost}" type="text" class="unitPurchaseCost smallInputBox inputElement" value="{if !empty($data.$purchaseCost) && !empty($data.$qty)}{((float)$data.$purchaseCost) / ((float)$data.$qty)}{else}0{/if}" data-rule-required=true data-rule-positive=false />
+            <input name="{$purchaseCost}" type="hidden" value="{if $data.$purchaseCost}{$data.$purchaseCost}{else}0{/if}" />
+            <span class="pull-right purchaseCost">{if $data.$purchaseCost}{$data.$purchaseCost}{else}0{/if}</span>
+        </td>
+    {/if}
 
 	<td>
 		<div id="productTotal{$row_no}" align="right" class="productTotal">{if $data.$productTotal}{$data.$productTotal}{else}0{/if}</div>

@@ -183,6 +183,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
     adjustmentEle : false,
     adjustmentTypeEles : false,
     grandTotal : false,
+    totalPurchaseCostEle : false,
+    marginTotalEle : false,
     groupTaxContainer : false,
     dedutTaxesContainer : false,
     
@@ -232,6 +234,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
         this.adjustmentEle = jQuery('#adjustment');
         this.adjustmentTypeEles = jQuery('input[name="adjustmentType"]');
         this.grandTotal = jQuery('#grandTotal');
+        this.totalPurchaseCostEle = jQuery('#totalPurchaseCost');
+        this.marginTotalEle = jQuery('#marginTotal');
         this.groupTaxContainer = jQuery('#group_tax_div');
         this.dedutTaxesContainer = jQuery('#deductTaxesBlock');
         
@@ -705,12 +709,62 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 		return this;
 	},
 
-	getGrandTotal : function() {
-		var grandTotal = this.grandTotal.text();
+        getGrandTotal : function() {
+                var grandTotal = this.grandTotal.text();
         if(grandTotal)
             return parseFloat(grandTotal);
         return 0;
-	},
+        },
+
+    calculateTotalPurchaseCost : function(){
+        var self = this;
+        var total = 0;
+        this.lineItemsHolder.find('tr.'+this.lineItemDetectingClass+' .purchaseCost').each(function(index,domElement){
+            var val = parseFloat(jQuery(domElement).text());
+            if(!isNaN(val)){
+                total += val;
+            }
+        });
+        total = total.toFixed(this.numOfCurrencyDecimals);
+        this.setTotalPurchaseCost(total);
+    },
+
+    calculateMarginTotal : function(){
+        var self = this;
+        var total = 0;
+        this.lineItemsHolder.find('tr.'+this.lineItemDetectingClass+' .margin').each(function(index,domElement){
+            var val = parseFloat(jQuery(domElement).text());
+            if(!isNaN(val)){
+                total += val;
+            }
+        });
+        total = total.toFixed(this.numOfCurrencyDecimals);
+        this.setMarginTotal(total);
+    },
+
+        setTotalPurchaseCost : function(value){
+                this.totalPurchaseCostEle.text(value);
+                return this;
+        },
+
+        getTotalPurchaseCost : function(){
+                var val = this.totalPurchaseCostEle.text();
+                if(val)
+                        return parseFloat(val);
+                return 0;
+        },
+
+        setMarginTotal : function(value){
+                this.marginTotalEle.text(value);
+                return this;
+        },
+
+        getMarginTotal : function(){
+                var val = this.marginTotalEle.text();
+                if(val)
+                        return parseFloat(val);
+                return 0;
+        },
     
     isIndividualTaxMode : function() {
         return (this.taxTypeElement.val() == Inventory_Edit_Js.individualTaxType) ? true : false;
@@ -1270,9 +1324,11 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 			grandTotal -=  parseFloat(adjustment);
 		}
 
-		grandTotal = grandTotal.toFixed(this.numOfCurrencyDecimals);
-		this.setGrandTotal(grandTotal);
-	},
+                grandTotal = grandTotal.toFixed(this.numOfCurrencyDecimals);
+                this.setGrandTotal(grandTotal);
+                this.calculateTotalPurchaseCost();
+                this.calculateMarginTotal();
+        },
     
     calculateGroupTax : function() {
         var self = this;
@@ -1674,18 +1730,25 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
             var params = {'currentTarget' : currentTarget}
             var newLineItem = self.getNewLineItem(params);
             newLineItem = newLineItem.appendTo(self.lineItemsHolder);
-			newLineItem.find('input.productName').addClass('autoComplete');
+            if(currentTarget.attr('id') != 'addCustom'){
+                        newLineItem.find('input.productName').addClass('autoComplete');
+            } else {
+                        newLineItem.find('input.productName').removeClass('autoComplete');
+            }
             newLineItem.find('.ignore-ui-registration').removeClass('ignore-ui-registration');
             vtUtils.applyFieldElementsView(newLineItem);
             app.event.trigger('post.lineItem.New', newLineItem);
             self.checkLineItemRow();
-            self.registerLineItemAutoComplete(newLineItem);
+            if(currentTarget.attr('id') != 'addCustom'){
+                self.registerLineItemAutoComplete(newLineItem);
+            }
             if(typeof data != "undefined") {
                 self.mapResultsToFields(newLineItem,data);
             }
         }
         jQuery('#addProduct').on('click', addLineItemEventHandler);
         jQuery('#addService').on('click', addLineItemEventHandler);
+        jQuery('#addCustom').on('click', addLineItemEventHandler);
     },
     
     registerProductAndServiceSelector : function() {
@@ -1736,8 +1799,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
     /**
 	  * Function which will register event for list price event change
 	  */
-	 registerListPriceChangeEvent : function() {
-		var self = this;
+        registerListPriceChangeEvent : function() {
+                var self = this;
 		
 		this.lineItemsHolder.on('focusout', 'input.listPrice',function(e){
 			var element = jQuery(e.currentTarget);
@@ -1768,9 +1831,21 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 					element.data('isPriceChanged', true);
 				}
 			}
-			self.quantityChangeActions(lineItemRow);
-		});
-	 },
+                self.quantityChangeActions(lineItemRow);
+                });
+        },
+
+        registerPurchaseCostChangeEvent : function() {
+                var self = this;
+                this.lineItemsHolder.on('focusout','input.unitPurchaseCost', function(e){
+                        var element = jQuery(e.currentTarget);
+                        var lineItemRow = self.getClosestLineItemRow(element);
+                        if(!self.formValidatorInstance.element(element)) {
+                                return;
+                        }
+                        self.quantityChangeActions(lineItemRow);
+                });
+        },
      
 	 //軽減税率のチェックボックスを変更したときに、変更内容を保存
 	 registerReducedtaxrateChangeEvent : function(){
@@ -2524,6 +2599,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
     registerLineItemEvents : function() {
         this.registerQuantityChangeEvent();
         this.registerListPriceChangeEvent();
+        this.registerPurchaseCostChangeEvent();
         this.registerPriceBookPopUp();
         this.registerLineItemTaxShowEvent();
         this.registerTaxTypeChange();

@@ -160,16 +160,16 @@
 						<td>
 							<strong>{vtranslate('LBL_QTY',$MODULE)}</strong>
 						</td>
-						{if $PURCHASE_COST_EDITABLE}
-							<td>
-								<strong class="pull-right">{vtranslate({$LINEITEM_FIELDS['purchase_cost']->get('label')},$MODULE)}</strong>
-							</td>
-						{/if}
-						{if $LIST_PRICE_EDITABLE}
-							<td>
-								<strong>{vtranslate({$LINEITEM_FIELDS['listprice']->get('label')},$MODULE)}</strong>
-							</td>
-						{/if}
+                                               {if $LIST_PRICE_EDITABLE}
+                                                       <td>
+                                                               <strong>{vtranslate({$LINEITEM_FIELDS['listprice']->get('label')},$MODULE)}</strong>
+                                                       </td>
+                                               {/if}
+                                               {if $PURCHASE_COST_EDITABLE}
+                                                       <td>
+                                                               <strong class="pull-right">{vtranslate({$LINEITEM_FIELDS['purchase_cost']->get('label')},$MODULE)}</strong>
+                                                       </td>
+                                               {/if}
 						<td><strong class="pull-right">{vtranslate('LBL_TOTAL',$MODULE)}</strong></td>
 							{if $MARGIN_EDITABLE && $PURCHASE_COST_EDITABLE}
 							<td>
@@ -204,24 +204,39 @@
 								<i class="fa fa-plus"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_PRODUCT',$MODULE)}</strong>
 							</button>
 						</span>
-						<span class="btn-group">
-							<button type="button" class="btn btn-default" id="addService" data-module-name="Services" >
-								<i class="fa fa-plus"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_SERVICE',$MODULE)}</strong>
-							</button>
-						</span>
+                                                <span class="btn-group">
+                                                        <button type="button" class="btn btn-default" id="addService" data-module-name="Services" >
+                                                                <i class="fa fa-plus"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_SERVICE',$MODULE)}</strong>
+                                                        </button>
+                                                </span>
+                                                <span class="btn-group">
+                                                        <button type="button" class="btn btn-default" id="addCustom" data-module-name="Custom" >
+                                                                <i class="fa fa-plus"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_CUSTOM_ITEM',$MODULE)}</strong>
+                                                        </button>
+                                                </span>
 					</div>
 				{elseif $PRODUCT_ACTIVE eq 'true'}
-					<div class="btn-group">
-						<button type="button" class="btn btn-default" id="addProduct" data-module-name="Products">
-							<i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_PRODUCT',$MODULE)}</strong>
-						</button>
-					</div>
+                                        <div class="btn-group">
+                                                <button type="button" class="btn btn-default" id="addProduct" data-module-name="Products">
+                                                        <i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_PRODUCT',$MODULE)}</strong>
+                                                </button>
+                                        </div>
+                                        <div class="btn-group">
+                                                <button type="button" class="btn btn-default" id="addCustom" data-module-name="Custom">
+                                                        <i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_CUSTOM_ITEM',$MODULE)}</strong>
+                                                </button>
+                                        </div>
 				{elseif $SERVICE_ACTIVE eq 'true'}
-					<div class="btn-group">
-						<button type="button" class="btn btn-default" id="addService" data-module-name="Services">
-							<i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_SERVICE',$MODULE)}</strong>
-						</button>
-					</div>
+                                        <div class="btn-group">
+                                                <button type="button" class="btn btn-default" id="addService" data-module-name="Services">
+                                                        <i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_SERVICE',$MODULE)}</strong>
+                                                </button>
+                                        </div>
+                                        <div class="btn-group">
+                                                <button type="button" class="btn btn-default" id="addCustom" data-module-name="Custom">
+                                                        <i class="fa fa-plus"></i><strong>&nbsp;&nbsp;{vtranslate('LBL_ADD_CUSTOM_ITEM',$MODULE)}</strong>
+                                                </button>
+                                        </div>
 				{/if}
 			</div>
 		</div>
@@ -467,15 +482,31 @@
 						</span>
 					</td>
 				</tr>
-				<tr valign="top">
-					<td width="83%">
-						<span class="pull-right"><strong>{vtranslate('LBL_GRAND_TOTAL',$MODULE)}</strong></span>
-					</td>
-					<td>
-						<span id="grandTotal" name="grandTotal" class="pull-right grandTotal">{$FINAL.grandTotal}</span>
-					</td>
-				</tr>
-				{if $MODULE eq 'Invoice' or $MODULE eq 'PurchaseOrder'}
+                                <tr valign="top">
+                                        <td width="83%">
+                                                <span class="pull-right"><strong>{vtranslate('LBL_GRAND_TOTAL',$MODULE)}</strong></span>
+                                        </td>
+                                        <td>
+                                                <span id="grandTotal" name="grandTotal" class="pull-right grandTotal">{$FINAL.grandTotal}</span>
+                                        </td>
+                                </tr>
+                                <tr valign="top">
+                                        <td width="83%">
+                                                <span class="pull-right"><strong>{vtranslate('LBL_TOTAL_PURCHASE_COST',$MODULE)}</strong></span>
+                                        </td>
+                                        <td>
+                                                <span id="totalPurchaseCost" name="totalPurchaseCost" class="pull-right">{if $FINAL.totalPurchaseCost}{$FINAL.totalPurchaseCost}{else}0{/if}</span>
+                                        </td>
+                                </tr>
+                                <tr valign="top">
+                                        <td width="83%">
+                                                <span class="pull-right"><strong>{vtranslate('LBL_MARGIN_TOTAL',$MODULE)}</strong></span>
+                                        </td>
+                                        <td>
+                                                <span id="marginTotal" name="marginTotal" class="pull-right">{if $FINAL.marginTotal}{$FINAL.marginTotal}{else}0{/if}</span>
+                                        </td>
+                                </tr>
+                                {if $MODULE eq 'Invoice' or $MODULE eq 'PurchaseOrder'}
 					<tr valign="top">
 						<td width="83%" >
 							<div class="pull-right">
